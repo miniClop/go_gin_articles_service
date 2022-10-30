@@ -13,10 +13,12 @@ var articleList = []article{
 	{ID: 2, Title: "Article 2", Content: "Article Content 2"},
 }
 
+// AllArticles Получение списка артикулов
 func AllArticles() []article {
 	return articleList
 }
 
+// ArticleById Получение артикула по ID
 func ArticleById(id int) (*article, error) {
 	for _, a := range AllArticles() {
 		if a.ID == id {

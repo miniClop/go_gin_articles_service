@@ -7,22 +7,17 @@ import (
 	"strconv"
 )
 
+// ShowIndexPage Вид главной страницы
 func ShowIndexPage(c *gin.Context) {
 	articles := models.AllArticles()
 
-	c.HTML(
-		// Set the HTTP status to 200 (OK)
-		http.StatusOK,
-		// Use the index.html template
-		"index.html",
-		// Pass the data that the page uses
-		gin.H{
-			"title":   "Home Page",
-			"payload": articles,
-		},
-	)
+	render(c, gin.H{
+		"title":   "Home Page",
+		"payload": articles,
+	}, "index.html")
 }
 
+// Article Получение одного экземпляра артикула, по переданному параметру `article_id'
 func Article(c *gin.Context) {
 	articleId, err := strconv.Atoi(c.Param("article_id"))
 	if err != nil {
@@ -34,15 +29,20 @@ func Article(c *gin.Context) {
 		panic(err)
 	}
 
-	c.HTML(
-		// Set the HTTP status to 200 (OK)
-		http.StatusOK,
-		// Use the index.html template
-		"article.html",
-		// Pass the data that the page uses
-		gin.H{
-			"title":   article.Title,
-			"payload": article,
-		},
-	)
+	render(c, gin.H{
+		"title":   article.Title,
+		"payload": article,
+	}, "article.html")
+}
+
+// render Вспомогательный хелпер для возвращения данных в необходимом формате переданного заголовка `Accept`
+func render(c *gin.Context, data gin.H, templateName string) {
+	switch c.Request.Header.Get("Accept") {
+	case "application/json":
+		c.JSON(http.StatusOK, data["payload"])
+	case "application/xml":
+		c.XML(http.StatusOK, data["payload"])
+	default:
+		c.HTML(http.StatusOK, templateName, data)
+	}
 }

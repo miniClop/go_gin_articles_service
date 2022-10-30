@@ -5,13 +5,13 @@ import (
 	"testing"
 )
 
-func Test_allArticles(t *testing.T) {
+func TestAllArticles(t *testing.T) {
 	tests := []struct {
 		name string
 		want []article
 	}{
 		{
-			name: "Article test",
+			name: "Get All Article test",
 			want: []article{
 				{1, "Article 1", "Article Content 1"},
 				{2, "Article 2", "Article Content 2"},
